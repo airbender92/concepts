@@ -30,3 +30,26 @@ greet(y); // OK
 这个比较过程是递归进行的，检查每个成员及子成员。
 
 # 比较两个函数
+
+```ts
+let x = (a: number) => 0;
+let y = (b: number, s: string) => 0;
+
+y = x; // OK
+x = y; // Error
+```
+
+要查看x是否能赋值给y，首先看它们的参数列表。 x的每个参数必须能在y里找到对应类型的参数。 注意的是参数的名字相同与否无所谓，只看它们的类型。 这里，x的每个参数在y中都能找到对应的参数，所以允许赋值。
+
+第二个赋值错误，因为y有个必需的第二个参数，但是x并没有，所以不允许赋值。
+
+你可能会疑惑为什么允许忽略参数，像例子y = x中那样。 原因是忽略额外的参数在JavaScript里是很常见的。 例如，Array#forEach给回调函数传3个参数：数组元素，索引和整个数组。 尽管如此，传入一个只使用第一个参数的回调函数也是很有用的：
+```ts
+let items = [1, 2, 3];
+
+// Don't force these extra arguments
+items.forEach((item, index, array) => console.log(item));
+
+// Should be OK!
+items.forEach((item) => console.log(item));
+```
